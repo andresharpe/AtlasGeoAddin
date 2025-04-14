@@ -1,15 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	<TargetFramework>net6.0-windows</TargetFramework>
-	<ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AssemblyName>Atlas-Dna</AssemblyName>
+	</PropertyGroup>
 	
-  <ItemGroup>
-    <PackageReference Include="ExcelDna.AddIn" Version="1.9.0-beta2" />
-    <PackageReference Include="ExcelDna.Integration" Version="1.9.0-beta2" />
-    <PackageReference Include="ExcelDna.IntelliSense" Version="1.9.0-beta2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ExcelDna.AddIn" Version="1.8.0" />
+		<PackageReference Include="ExcelDna.Integration" Version="1.8.0" />
+		<PackageReference Include="ExcelDna.IntelliSense" Version="1.8.0" />
+		<PackageReference Include="KdTree" Version="1.4.1" />
+	</ItemGroup>
+
+	<Target Name="PostBuildInstaller" AfterTargets="Build">
+		<Exec Command="set OutDir=$(TargetDir)&amp;&amp; &quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)Build\AtlasAddInInstaller.iss&quot;" />
+	</Target>
 
 </Project>
