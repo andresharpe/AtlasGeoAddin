@@ -22,7 +22,7 @@ jobs:
         run: dotnet restore
 
       - name: Build and Publish Add-in
-        run: dotnet publish src/Atlas.Dna/Atlas.Dna.csproj -c Release -r win-x64 --self-contained true
+        run: dotnet build src/Atlas.Dna/Atlas.Dna.csproj -c Release 
 
       - name: Rename and zip release files
         shell: pwsh

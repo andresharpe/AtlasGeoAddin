@@ -145,6 +145,15 @@ public static class LookupFunctions
                 return ExcelError.ExcelErrorValue;
             }
 
+            if (!GeoValidator.IsValidLatLon(lat, lon))
+            {
+                if (return_distance)
+                {
+                    return new object[] { ExcelError.ExcelErrorValue, ExcelError.ExcelErrorValue };
+                }
+                return ExcelError.ExcelErrorValue;
+            }
+
             double nearestDistance = double.MaxValue;
             object nearestId = ExcelError.ExcelErrorNA;
 
@@ -172,6 +181,10 @@ public static class LookupFunctions
         }
         catch
         {
+            if (return_distance)
+            {
+                return new object[] { ExcelError.ExcelErrorValue, ExcelError.ExcelErrorValue };
+            }
             return ExcelError.ExcelErrorValue;
         }
     }
