@@ -1,142 +1,184 @@
-# **Atlas Excel Add-in – Function Reference**
+# 🗺️ Atlas Excel Add-in – Function Reference
 
-The **Atlas Excel Add-in** provides powerful geographic and spatial analysis functions directly within Excel, enabling quick insights and analysis for any organization.
+The **Atlas Excel Add-in** brings advanced geographic and spatial analysis tools directly into Microsoft Excel. Perform fast, flexible, and intuitive geospatial computations without leaving your spreadsheet.
 
 ---
 
-## 🧩 Installation Options
+## 🚀 Installation
 
-Download the latest version from the [Releases](https://github.com/andresharpe/AtlasGeoAddin/releases).
+1. Download the latest version from the [Releases](https://github.com/andresharpe/AtlasGeoAddin/releases).
+2. Extract the ZIP (e.g. `AtlasAddIn-v1.2.3.zip`).
+3. Run `AtlasAddInInstaller-v1.2.3.exe`.
+4. Excel will automatically register the add-in.
 
-### 🔧 Manual Installation
-1. Download the zip file (e.g. `AtlasAddIn-v1.2.3.zip`) from the release.
-2. Extract it.
-3. Open Excel → `File` → `Options` → `Add-ins` → `Go...`.
-4. Click `Browse`, select the `.xll`, and load it.
+---
 
-### 📦 Installer Method
-1. From the same zip, run `AtlasAddInInstaller-v1.2.3.exe`.
-2. The add-in will be automatically installed into Excel.
-
-
-## **Distance & Measurement Functions**
+## 📏 Distance & Measurement
 
 ### `GEO_DISTANCE(lat1, lon1, lat2, lon2, [unit])`
-Calculates the distance between two geographic coordinates.
-- `unit`: `"km"` (default), `"mi"`
+Returns the great-circle distance between two coordinates using the Haversine formula.
+
+- `lat1`, `lon1`: Coordinates of the first location.  
+- `lat2`, `lon2`: Coordinates of the second location.  
+- `unit`: *(Optional)* `"km"` (default) or `"mi"`.
 
 **Example:**  
-`=GEO_DISTANCE(51.5, -0.1, 40.7, -74)` *(London to NYC distance)*
+`=GEO_DISTANCE(51.5, -0.1, 40.7, -74)`
 
 ---
 
 ### `GEO_TOTALDISTANCE(latlon_range, [unit])`
-Calculates total sequential distance for a list of lat/lon points.
-- `unit`: `"km"` (default), `"mi"`
+Calculates total distance between sequential coordinate pairs in a range.
+
+- `latlon_range`: 2-column range with latitudes and longitudes.  
+- `unit`: *(Optional)* `"km"` (default) or `"mi"`.
 
 ---
 
-## **Nearest & Furthest Lookup Functions**
+## 📍 Nearest & Furthest Lookups
 
-### Single Item Lookup:
-- **Nearest:** `GEO_LOOKUPNEAREST(lat, lon, lat_range, lon_range, id_range, return_distance)`
-- **Furthest:** `GEO_LOOKUPFURTHEST(lat, lon, lat_range, lon_range, id_range, return_distance)`
+### `GEO_LOOKUPNEAREST(lat, lon, lat_range, lon_range, id_range, return_distance)`
+Returns the ID of the closest location to the specified point.
 
-Returns the identifier (`id_range`) of the nearest or furthest point.
-
----
-
-### Multiple Item Lookup (K-nearest/furthest):
-- **Nearest K:** `GEO_LOOKUPNEARESTK(lat, lon, lat_range, lon_range, id_range, [k], return_distance)`
-- **Furthest K:** `GEO_LOOKUPFURTHESTK(lat, lon, lat_range, lon_range, id_range, [k], return_distance)`
-
-Returns array of identifiers (`id_range`) sorted by proximity.
+- `lat`, `lon`: Origin coordinates.  
+- `lat_range`, `lon_range`: Ranges of coordinates to compare.  
+- `id_range`: Corresponding IDs for the locations.  
+- `return_distance`: If `TRUE`, returns both ID and distance.
 
 ---
 
-### Radius-based Lookup:
-#### `GEO_LOOKUPWITHINRADIUS(lat, lon, lat_range, lon_range, radius, [unit])`
-Returns identifiers within specified radius.
+### `GEO_LOOKUPFURTHEST(lat, lon, lat_range, lon_range, id_range, return_distance)`
+Same as above, but returns the furthest location.
 
 ---
 
-## **KD-Tree Indexed Lookup Functions**
+### `GEO_LOOKUPNEARESTK(lat, lon, lat_range, lon_range, id_range, [k], return_distance)`
+Returns a sorted list of the K nearest locations.
 
-Optimized for speed when working with large datasets.
-
-### Creating and Managing Indexes:
-#### `GEO_INDEXCREATE(index_name, id_range, lat_range, lon_range)`
-Creates an optimized spatial index for fast lookups.
-
-#### `GEO_INDEXCLEAR(index_name)`
-Removes the specified spatial index from memory.
+- `k`: *(Optional)* Number of results to return. Defaults to 1.  
+Other arguments as above.
 
 ---
 
-### Indexed Nearest Lookup:
-- **Nearest Indexed:** `GEO_INDEXLOOKUPNEAREST(index_name, lat, lon, return_distance)`
-- **Nearest Indexed:** `GEO_INDEXLOOKUPNEARESTK(index_name, lat, lon, [k], return_distance)`
-
-Instantly returns IDs of nearest locations using indexed data.
+### `GEO_LOOKUPFURTHESTK(lat, lon, lat_range, lon_range, id_range, [k], return_distance)`
+Same as above, but for furthest K locations.
 
 ---
 
-## **Midpoint, Centroid & Area**
+### `GEO_LOOKUPWITHINRADIUS(lat, lon, lat_range, lon_range, radius, [unit])`
+Returns a list of IDs within a given radius.
 
-- `GEO_MIDPOINT(lat1, lon1, lat2, lon2)`
-  Midpoint between two coordinates.
-  
-- `GEO_CENTROID(lat_range, lon_range)`
-  Geographic center (centroid) of multiple coordinates.
+- `radius`: Distance threshold.  
+- `unit`: *(Optional)* `"km"` (default) or `"mi"`.
 
 ---
 
-## **Bearing & Direction**
+## ⚡ KD-Tree Accelerated Lookups
 
-- `GEO_BEARING(lat1, lon1, lat2, lon2)`
-  Initial bearing between points (degrees).
-  
-- `GEO_DIRECTION(lat1, lon1, lat2, lon2)`
-  Compass direction (N, NE, SW, etc.) between coordinates.
+### `GEO_INDEXCREATE(index_name, id_range, lat_range, lon_range)`
+Creates a spatial index (KD-tree) in memory for faster queries.
 
----
-
-## **Validation & Formatting**
-
-- `GEO_ISVALID(lat, lon)`
-  Checks if coordinates are valid geographic coordinates.
-
-- `GEO_NORMALIZE(lat, lon)`
-  Normalizes latitude and longitude to standard ranges.
+- `index_name`: Unique name for the index.  
+- `id_range`, `lat_range`, `lon_range`: Data to index.
 
 ---
 
-## **Conversion Functions**
+### `GEO_INDEXCLEAR(index_name)`
+Clears a named index from memory.
+
+---
+
+### `GEO_INDEXLOOKUPNEAREST(index_name, lat, lon, return_distance)`
+Performs fast nearest neighbor lookup using a named index.
+
+---
+
+### `GEO_INDEXLOOKUPNEARESTK(index_name, lat, lon, [k], return_distance)`
+Returns the K nearest IDs from the indexed dataset.
+
+---
+
+## 📌 Geometry Tools
+
+### `GEO_MIDPOINT(lat1, lon1, lat2, lon2)`
+Returns the geographic midpoint between two coordinates.
+
+---
+
+### `GEO_CENTROID(lat_range, lon_range)`
+Computes the geographic center (centroid) of multiple coordinates.
+
+---
+
+## 🧭 Bearings & Compass Directions
+
+### `GEO_BEARING(lat1, lon1, lat2, lon2)`
+Returns the initial bearing from point A to point B in degrees.
+
+---
+
+### `GEO_DIRECTION(lat1, lon1, lat2, lon2)`
+Returns compass direction (e.g., "N", "NE", "SW") from point A to B.
+
+---
+
+## ✅ Validation & Normalization
+
+### `GEO_ISVALID(lat, lon)`
+Checks whether the coordinates are valid (i.e., -90 ≤ lat ≤ 90, -180 ≤ lon ≤ 180).
+
+---
+
+### `GEO_NORMALIZE(lat, lon)`
+Normalizes input to standard ranges:
+- Latitude: -90 to 90  
+- Longitude: -180 to 180
+
+---
+
+## 🔗 Conversion Utilities
 
 ### `GEO_TO_GOOGLE_MAPS_URL(lat, lon)`
-Converts geographic coordinates to a Google Maps URL.
+Returns a shareable Google Maps link for the given coordinate.
 
 **Example:**  
-`=GEO_TO_GOOGLE_MAPS_URL(51.5, -0.1)` *(Google Maps URL for London)*
+`=GEO_TO_GOOGLE_MAPS_URL(51.5, -0.1)`
 
 ---
 
-## **Example Workflow for Optimized Lookups**
+## ⚙️ Sample Workflow
 
-1. **Create a KD-tree index (once):**2. **Fast lookups using the index:**
-3. **Clear index if no longer needed:**
----
-
-## **Error Handling**
-Atlas functions follow standard Excel conventions, returning Excel errors (`#N/A`, `#VALUE!`, `#NUM!`) clearly describing issues.
-
----
-
-**Atlas Excel Add-in** provides robust, intuitive functions for your geographic analysis, directly integrated within Excel for efficiency, accuracy, and ease of use.
+1. **Create a spatial index:**  
+   `=GEO_INDEXCREATE("myIndex", A2:A100, B2:B100, C2:C100)`
+2. **Perform fast lookups:**  
+   `=GEO_INDEXLOOKUPNEAREST("myIndex", 51.5, -0.1, TRUE)`
+3. **Clear index when done:**  
+   `=GEO_INDEXCLEAR("myIndex")`
 
 ---
 
-## **Summary of Functions**
+## ⚠️ Error Handling
 
-- `GEO_CENTROID(lat_range, lon_range)`
-- `GEO_DIRECTION(lat1, lon1, lat2, lon2)`
+Atlas functions follow native Excel error conventions, such as:
+
+- `#N/A` – No match found  
+- `#VALUE!` – Invalid input  
+- `#NUM!` – Out-of-bounds values
+
+All functions are designed to fail gracefully with clear messages.
+
+---
+
+## 🎯 Why Choose Atlas?
+
+The **Atlas Excel Add-in** gives analysts, engineers, and operations teams the power of spatial computing in the tool they already know: Excel.
+
+- ⚡ Fast, lightweight, and accurate  
+- 🌐 Geospatial capabilities with zero external dependencies  
+- 🛠️ Optimized for both ad-hoc analysis and production use  
+- 🔁 Works seamlessly with large datasets
+
+---
+
+**Atlas Excel Add-in** — bring your location data to life in Excel.  
+_Your geospatial toolbox, just a formula away._
