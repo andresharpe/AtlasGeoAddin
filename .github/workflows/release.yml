@@ -1,0 +1,58 @@
+name: Build and Release Add-in
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on tags like v1.2.3
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build and Publish Add-in
+        run: dotnet publish src/Atlas.Dna/Atlas.Dna.csproj -c Release -r win-x64
+
+      - name: Rename and zip release files
+        run: |
+          $version = "${{ github.ref_name }}"
+          $xll = "src/Atlas.Dna/bin/Release/net6.0-windows/publish/Atlas.Dna-AddIn64-packed.xll"
+          $exe = "src/Atlas.Dna/bin/Release/net6.0-windows/AtlasAddInInstaller.exe"
+          mkdir dist
+          Copy-Item $xll "dist/AtlasAddIn-$version.xll"
+          Copy-Item $exe "dist/AtlasAddInInstaller-$version.exe"
+          Compress-Archive -Path dist/* -DestinationPath "AtlasAddIn-$version.zip"
+
+      - name: Upload zipped release package
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-zip
+          path: AtlasAddIn-*.zip
+
+  release:
+    needs: build
+    runs-on: windows-latest
+
+    steps:
+      - name: Download release zip
+        uses: actions/download-artifact@v3
+        with:
+          name: release-zip
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: AtlasAddIn-*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

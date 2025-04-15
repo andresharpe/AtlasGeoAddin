@@ -226,4 +226,47 @@ public static class LookupFunctions
             return ExcelError.ExcelErrorValue;
         }
     }
+
+    [ExcelFunction(Name = "GEO_LOOKUPWITHINRADIUS", Description = "Finds the IDs within a specified radius in a range of lat/lon entries for a source lat/lon.")]
+    public static object GeoLookupWithinRadius(
+        [ExcelArgument(Name = "lat", Description = "The source latitude value to lookup.")] double lat,
+        [ExcelArgument(Name = "lon", Description = "The source longitude value to lookup.")] double lon,
+        [ExcelArgument(Name = "lat_range", Description = "A 2D array of latitudes to lookup into.")] object[,] lat_range,
+        [ExcelArgument(Name = "lon_range", Description = "A 2D array of longitudes to lookup into.")] object[,] lon_range,
+        [ExcelArgument(Name = "id_range", Description = "A 2D array of IDs corresponding to the latitudes and longitudes to lookup into.")] object[,] id_range,
+        [ExcelArgument(Name = "radius", Description = "The radius within which to find the IDs.")] double radius,
+        [ExcelArgument(Name = "[unit]", Description = "The unit of the radius (\"km\" or \"mi\").")] string unit = "km")
+    {
+        try
+        {
+            int latsCount = lat_range.GetLength(0);
+            int lonsCount = lon_range.GetLength(0);
+            int idsCount = id_range.GetLength(0);
+
+            if (latsCount != lonsCount || latsCount != idsCount)
+            {
+                return ExcelError.ExcelErrorValue;
+            }
+
+            var result = new List<object>();
+
+            for (int i = 0; i < latsCount; i++)
+            {
+                if (GeoValidator.TryGetValidLatLon(lat_range[i, 0], lon_range[i, 0], out double validLat, out double validLon))
+                {
+                    double dist = GeoCalculations.HaversineDistance(lat, lon, validLat, validLon, unit);
+                    if (dist <= radius)
+                    {
+                        result.Add(id_range[i, 0]);
+                    }
+                }
+            }
+
+            return result.ToArray();
+        }
+        catch
+        {
+            return ExcelError.ExcelErrorValue;
+        }
+    }
 }

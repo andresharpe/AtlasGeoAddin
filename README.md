@@ -4,6 +4,21 @@ The **Atlas Excel Add-in** provides powerful geographic and spatial analysis fun
 
 ---
 
+## 🧩 Installation Options
+
+Download the latest version from the [Releases](https://github.com/andresharpe/AtlasGeoAddin/releases).
+
+### 🔧 Manual Installation
+1. Download the zip file (e.g. `AtlasAddIn-v1.2.3.zip`) from the release.
+2. Extract it.
+3. Open Excel → `File` → `Options` → `Add-ins` → `Go...`.
+4. Click `Browse`, select the `.xll`, and load it.
+
+### 📦 Installer Method
+1. From the same zip, run `AtlasAddInInstaller-v1.2.3.exe`.
+2. The add-in will be automatically installed into Excel.
+
+
 ## **Distance & Measurement Functions**
 
 ### `GEO_DISTANCE(lat1, lon1, lat2, lon2, [unit])`
@@ -74,9 +89,6 @@ Instantly returns IDs of nearest locations using indexed data.
 - `GEO_CENTROID(lat_range, lon_range)`
   Geographic center (centroid) of multiple coordinates.
 
-- `GEO_AREAOFPOLYGON(lat_range, lon_range, [unit])`
-  Calculates approximate polygon area from coordinates.
-
 ---
 
 ## **Bearing & Direction**
@@ -99,6 +111,16 @@ Instantly returns IDs of nearest locations using indexed data.
 
 ---
 
+## **Conversion Functions**
+
+### `GEO_TO_GOOGLE_MAPS_URL(lat, lon)`
+Converts geographic coordinates to a Google Maps URL.
+
+**Example:**  
+`=GEO_TO_GOOGLE_MAPS_URL(51.5, -0.1)` *(Google Maps URL for London)*
+
+---
+
 ## **Example Workflow for Optimized Lookups**
 
 1. **Create a KD-tree index (once):**2. **Fast lookups using the index:**
@@ -111,3 +133,10 @@ Atlas functions follow standard Excel conventions, returning Excel errors (`#N/A
 ---
 
 **Atlas Excel Add-in** provides robust, intuitive functions for your geographic analysis, directly integrated within Excel for efficiency, accuracy, and ease of use.
+
+---
+
+## **Summary of Functions**
+
+- `GEO_CENTROID(lat_range, lon_range)`
+- `GEO_DIRECTION(lat1, lon1, lat2, lon2)`
