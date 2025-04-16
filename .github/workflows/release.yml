@@ -30,7 +30,8 @@ jobs:
           $version = $tag.TrimStart("v")          # e.g., "0.2.6"
           dotnet build src/Atlas.Dna/Atlas.Dna.csproj -c Release `
             -p:Version=$version `
-            -p:InformationalVersion=$tag
+            -p:InformationalVersion=$tag `
+            -p:IncludeSourceRevisionInInformationalVersion=false
       - name: Rename and zip release files
         shell: pwsh
         run: |
