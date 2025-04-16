@@ -25,7 +25,9 @@ jobs:
         run: dotnet restore
 
       - name: Build and Publish Add-in
-        run: dotnet build src/Atlas.Dna/Atlas.Dna.csproj -c Release 
+        run: |
+          $version = "${{ github.ref_name }}"
+          dotnet build src/Atlas.Dna/Atlas.Dna.csproj -c Release -p:Version=$version -p:InformationalVersion=$version
 
       - name: Rename and zip release files
         shell: pwsh
