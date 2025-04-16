@@ -1,5 +1,9 @@
 # 🗺️ Atlas Excel Add-in – Function Reference
 
+<p align="center">
+  <img src="./docs/Atlas-01.png" alt="Atlas Logo" width="200"/>
+</p>
+
 The **Atlas Excel Add-in** brings advanced geographic and spatial analysis tools directly into Microsoft Excel. Perform fast, flexible, and intuitive geospatial computations without leaving your spreadsheet.
 
 ---
