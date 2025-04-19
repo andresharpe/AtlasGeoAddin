@@ -184,7 +184,27 @@ Finds the timezone name for a given latitude and longitude.
 `=GEO_TIMEZONE(51.5, -0.1)`  
 
 ---
+### `GEO_TIMEZONEOFFSET_STANDARD(lat, lon)`  
+Finds the standard timezone offset for a given latitude and longitude.  
 
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_TIMEZONEOFFSET_STANDARD(51.5, -0.1)`  
+
+---  
+
+### `GEO_TIMEZONEOFFSET_DAYLIGHTSAVINGS(lat, lon)`  
+Finds the daylight savings timezone offset for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_TIMEZONEOFFSET_DAYLIGHTSAVINGS(51.5, -0.1)`  
+
+---
 ## ⚙️ Sample Workflow
 
 1. **Create a spatial index:**  
