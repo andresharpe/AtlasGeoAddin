@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Atlas.BuildBin": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}

@@ -150,6 +150,41 @@ Returns a shareable Google Maps link for the given coordinate.
 
 ---
 
+## 🌍 Reverse Lookup Functions  
+
+### `GEO_COUNTRY(lat, lon)`  
+Finds the country name for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_COUNTRY(51.5, -0.1)`  
+
+---  
+
+### `GEO_CITY(lat, lon)`  
+Finds the city name for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_CITY(51.5, -0.1)`  
+
+---  
+
+### `GEO_TIMEZONE(lat, lon)`  
+Finds the timezone name for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_TIMEZONE(51.5, -0.1)`  
+
+---
+
 ## ⚙️ Sample Workflow
 
 1. **Create a spatial index:**  

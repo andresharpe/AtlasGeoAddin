@@ -12,7 +12,19 @@
 		<PackageReference Include="ExcelDna.Integration" Version="1.8.0" />
 		<PackageReference Include="ExcelDna.IntelliSense" Version="1.8.0" />
 		<PackageReference Include="KdTree" Version="1.4.1" />
+		<PackageReference Include="MessagePack" Version="3.1.3" />
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Update="worldcities.bin">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="worldcities.bin" />
+	</ItemGroup>
+
 
 	<Target Name="PostBuildInstaller" AfterTargets="Build">
 		<Exec Command="set OutDir=$(TargetDir)&amp;&amp; &quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)Build\AtlasAddInInstaller.iss&quot;" />
