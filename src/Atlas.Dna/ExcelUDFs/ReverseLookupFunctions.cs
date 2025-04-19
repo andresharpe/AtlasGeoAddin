@@ -116,4 +116,82 @@ public static class ReverseLookupFunctions
             return ExcelError.ExcelErrorValue;
         }
     }
+
+    [ExcelFunction(Name = "GEO_TIMEZONEOFFSET_STANDARD", Description = "Finds the standard Timezone offset for a given latitude and longitude.")]
+    public static object GeoReverseLookupTimeZoneOffsetStandard(
+        [ExcelArgument(Name = "lat", Description = "The latitude value to lookup.")] double lat,
+        [ExcelArgument(Name = "lon", Description = "The longitude value to lookup.")] double lon)
+    {
+        try
+        {
+            if (!GeoValidator.IsValidLatLon(lat, lon))
+            {
+                return ExcelError.ExcelErrorValue;
+            }
+
+            if (!CityDataLoader.IsLoaded)
+            {
+                CityDataLoader.Load();
+            }
+
+            var nearestCity = CityDataLoader.GetNearestCity((float)lat, (float)lon);
+            if (nearestCity == null)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            var tzIndex = nearestCity.Timezone;
+            if (tzIndex < 0 || tzIndex >= CityDataLoader.Data!.StringPool.Count)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            var tz = CityDataLoader.Data.StringPool[tzIndex];
+
+            return tz.ToTimeZoneOffsets().StandardOffset;
+        }
+        catch
+        {
+            return ExcelError.ExcelErrorValue;
+        }
+    }
+
+    [ExcelFunction(Name = "GEO_TIMEZONEOFFSET_DAYLIGHTSAVINGS", Description = "Finds the day light savings Timezone offset for a given latitude and longitude.")]
+    public static object GeoReverseLookupTimeZoneOffsetDls(
+    [ExcelArgument(Name = "lat", Description = "The latitude value to lookup.")] double lat,
+    [ExcelArgument(Name = "lon", Description = "The longitude value to lookup.")] double lon)
+    {
+        try
+        {
+            if (!GeoValidator.IsValidLatLon(lat, lon))
+            {
+                return ExcelError.ExcelErrorValue;
+            }
+
+            if (!CityDataLoader.IsLoaded)
+            {
+                CityDataLoader.Load();
+            }
+
+            var nearestCity = CityDataLoader.GetNearestCity((float)lat, (float)lon);
+            if (nearestCity == null)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            var tzIndex = nearestCity.Timezone;
+            if (tzIndex < 0 || tzIndex >= CityDataLoader.Data!.StringPool.Count)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            var tz = CityDataLoader.Data.StringPool[tzIndex];
+
+            return tz.ToTimeZoneOffsets().DaylightSavingOffset;
+        }
+        catch
+        {
+            return ExcelError.ExcelErrorValue;
+        }
+    }
 }
