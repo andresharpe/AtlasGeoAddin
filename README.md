@@ -204,6 +204,105 @@ Finds the daylight savings timezone offset for a given latitude and longitude.
 **Example:**  
 `=GEO_TIMEZONEOFFSET_DAYLIGHTSAVINGS(51.5, -0.1)`  
 
+
+## 🌍 Reverse Lookup Functions  
+
+### `GEO_COUNTRY(lat, lon)`  
+Finds the country name for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_COUNTRY(51.5, -0.1)`  
+
+---  
+
+### `GEO_COUNTRYCODE(lat, lon)`  
+Finds the country ISO2 code for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_COUNTRYCODE(51.5, -0.1)`  
+
+---  
+
+### `GEO_ADMIN(lat, lon)`  
+Finds the administration name for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_ADMIN(51.5, -0.1)`  
+
+---  
+
+### `GEO_ADMINCODE(lat, lon)`  
+Finds the administration code for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_ADMINCODE(51.5, -0.1)`  
+
+---  
+
+### `GEO_ADMINTYPE(lat, lon)`  
+Finds the administration type for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_ADMINTYPE(51.5, -0.1)`  
+
+---  
+
+### `GEO_CITY(lat, lon)`  
+Finds the city name for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_CITY(51.5, -0.1)`  
+
+---  
+
+### `GEO_TIMEZONE(lat, lon)`  
+Finds the timezone name for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_TIMEZONE(51.5, -0.1)`  
+
+---  
+
+### `GEO_TIMEZONEOFFSET_STANDARD(lat, lon)`  
+Finds the standard timezone offset for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_TIMEZONEOFFSET_STANDARD(51.5, -0.1)`  
+
+---  
+
+### `GEO_TIMEZONEOFFSET_DAYLIGHTSAVINGS(lat, lon)`  
+Finds the daylight savings timezone offset for a given latitude and longitude.  
+
+- `lat`: The latitude value to lookup.  
+- `lon`: The longitude value to lookup.  
+
+**Example:**  
+`=GEO_TIMEZONEOFFSET_DAYLIGHTSAVINGS(51.5, -0.1)`
 ---
 ## ⚙️ Sample Workflow
 
