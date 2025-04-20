@@ -249,6 +249,7 @@ Finds the daylight savings timezone offset for a given latitude and longitude.
 
 **Example:**  
 `=GEO_TIMEZONEOFFSET_DAYLIGHTSAVINGS(51.5, -0.1)`
+
 ---
 ## ⚙️ Sample Workflow
 
