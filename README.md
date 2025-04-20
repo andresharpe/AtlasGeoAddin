@@ -124,12 +124,23 @@ Returns the initial bearing from point A to point B in degrees.
 ### `GEO_DIRECTION(lat1, lon1, lat2, lon2)`
 Returns compass direction (e.g., "N", "NE", "SW") from point A to B.
 
----
+---  
 
-## ✅ Validation & Normalization
+## ✅ Validation & Normalization  
 
-### `GEO_ISVALID(lat, lon)`
-Checks whether the coordinates are valid (i.e., -90 ≤ lat ≤ 90, -180 ≤ lon ≤ 180).
+### `GEO_ISVALID(lat, lon)`  
+Checks whether the coordinates are valid (i.e., -90 ≤ lat ≤ 90, -180 ≤ lon ≤ 180).  
+
+---  
+
+### `GEO_ISVALID2(lat, lon, country)`  
+Checks whether the coordinates are valid and belong to the specified country.  
+
+- `lat`, `lon`: The latitude and longitude values to validate.  
+- `country`: The country name or ISO code to validate against.  
+
+**Example:**  
+`=GEO_ISVALID2(51.5, -0.1, "United Kingdom")`  
 
 ---
 
