@@ -19,11 +19,9 @@ public static class CityDataLoader
             if (IsLoaded) return;
 
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = assembly.GetManifestResourceNames()
-                .FirstOrDefault(n => n.EndsWith("worldcities.bin"));
 
-            if (resourceName == null)
-                throw new Exception("worldcities.bin not found in embedded resources.");
+            var resourceName = assembly.GetManifestResourceNames()
+                .FirstOrDefault(n => n.EndsWith("worldcities.bin")) ?? throw new Exception("worldcities.bin not found in embedded resources.");
 
             using Stream stream = assembly.GetManifestResourceStream(resourceName)!;
             var options = MessagePackSerializerOptions.Standard
@@ -56,19 +54,39 @@ public static class CityDataLoader
 }
 
 [MessagePackObject]
+public class AdminCompact
+{
+    [Key(0)] public int AdminId = default!;
+    [Key(1)] public string AdminName = default!;
+    [Key(2)] public string AdminCode = default!;
+    [Key(3)] public string AdminType = default!;
+}
+
+[MessagePackObject]
 public class CityCompact
 {
     [Key(0)] public float Lat;
     [Key(1)] public float Lng;
     [Key(2)] public int City;
-    [Key(3)] public int Country;
+    [Key(3)] public byte Country;
     [Key(4)] public int Timezone;
-    [Key(5)] public int AdminType;
+    [Key(5)] public int Admin;
 }
 
 [MessagePackObject]
 public class CityDataBundle
 {
     [Key(0)] public List<CityCompact> Cities = new();
-    [Key(1)] public List<string> StringPool = new();
+    [Key(1)] public List<CountryCompact> Countries = new();
+    [Key(2)] public List<AdminCompact> Admins = new();
+    [Key(3)] public List<string> CityStringPool = new();
+    [Key(4)] public List<string> TimeZoneStringPool = new();
+}
+
+[MessagePackObject]
+public class CountryCompact
+{
+    [Key(0)] public byte CountryId = default!;
+    [Key(1)] public string CountryName = default!;
+    [Key(2)] public string CountryCode = default!;
 }

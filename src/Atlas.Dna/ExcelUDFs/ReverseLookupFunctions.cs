@@ -30,18 +30,167 @@ public static class ReverseLookupFunctions
             }
 
             var countryIndex = nearestCity.Country;
-            if (countryIndex < 0 || countryIndex >= CityDataLoader.Data!.StringPool.Count)
+            if (countryIndex < 0 || countryIndex >= CityDataLoader.Data!.Countries.Count)
             {
                 return ExcelError.ExcelErrorNA;
             }
 
-            return CityDataLoader.Data.StringPool[countryIndex];
+            return CityDataLoader.Data.Countries[countryIndex].CountryName;
         }
         catch
         {
             return ExcelError.ExcelErrorValue;
         }
     }
+
+    [ExcelFunction(Name = "GEO_COUNTRYCODE", Description = "Finds the country ISO2 code for a given latitude and longitude.")]
+    public static object GeoReverseLookupCountryCode(
+    [ExcelArgument(Name = "lat", Description = "The latitude value to lookup.")] double lat,
+    [ExcelArgument(Name = "lon", Description = "The longitude value to lookup.")] double lon)
+    {
+        try
+        {
+            if (!GeoValidator.IsValidLatLon(lat, lon))
+            {
+                return ExcelError.ExcelErrorValue;
+            }
+
+            if (!CityDataLoader.IsLoaded)
+            {
+                CityDataLoader.Load();
+            }
+
+            var nearestCity = CityDataLoader.GetNearestCity((float)lat, (float)lon);
+            if (nearestCity == null)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            var countryIndex = nearestCity.Country;
+            if (countryIndex < 0 || countryIndex >= CityDataLoader.Data!.Countries.Count)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            return CityDataLoader.Data.Countries[countryIndex].CountryCode;
+        }
+        catch
+        {
+            return ExcelError.ExcelErrorValue;
+        }
+    }
+
+    [ExcelFunction(Name = "GEO_ADMIN", Description = "Finds the administration name for a given latitude and longitude.")]
+    public static object GeoReverseLookupAdminName(
+    [ExcelArgument(Name = "lat", Description = "The latitude value to lookup.")] double lat,
+    [ExcelArgument(Name = "lon", Description = "The longitude value to lookup.")] double lon)
+    {
+        try
+        {
+            if (!GeoValidator.IsValidLatLon(lat, lon))
+            {
+                return ExcelError.ExcelErrorValue;
+            }
+
+            if (!CityDataLoader.IsLoaded)
+            {
+                CityDataLoader.Load();
+            }
+
+            var nearestCity = CityDataLoader.GetNearestCity((float)lat, (float)lon);
+            if (nearestCity == null)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            var adminIndex = nearestCity.Admin;
+            if (adminIndex < 0 || adminIndex >= CityDataLoader.Data!.Admins.Count)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            return CityDataLoader.Data.Admins[adminIndex].AdminName;
+        }
+        catch
+        {
+            return ExcelError.ExcelErrorValue;
+        }
+    }
+
+    [ExcelFunction(Name = "GEO_ADMINCODE", Description = "Finds the administration code for a given latitude and longitude.")]
+    public static object GeoReverseLookupAdminCode(
+        [ExcelArgument(Name = "lat", Description = "The latitude value to lookup.")] double lat,
+        [ExcelArgument(Name = "lon", Description = "The longitude value to lookup.")] double lon)
+    {
+        try
+        {
+            if (!GeoValidator.IsValidLatLon(lat, lon))
+            {
+                return ExcelError.ExcelErrorValue;
+            }
+
+            if (!CityDataLoader.IsLoaded)
+            {
+                CityDataLoader.Load();
+            }
+
+            var nearestCity = CityDataLoader.GetNearestCity((float)lat, (float)lon);
+            if (nearestCity == null)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            var adminIndex = nearestCity.Admin;
+            if (adminIndex < 0 || adminIndex >= CityDataLoader.Data!.Admins.Count)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            return CityDataLoader.Data.Admins[adminIndex].AdminCode;
+        }
+        catch
+        {
+            return ExcelError.ExcelErrorValue;
+        }
+    }
+
+    [ExcelFunction(Name = "GEO_ADMINTYPE", Description = "Finds the administration type for a given latitude and longitude.")]
+    public static object GeoReverseLookupAdminType(
+        [ExcelArgument(Name = "lat", Description = "The latitude value to lookup.")] double lat,
+        [ExcelArgument(Name = "lon", Description = "The longitude value to lookup.")] double lon)
+    {
+        try
+        {
+            if (!GeoValidator.IsValidLatLon(lat, lon))
+            {
+                return ExcelError.ExcelErrorValue;
+            }
+
+            if (!CityDataLoader.IsLoaded)
+            {
+                CityDataLoader.Load();
+            }
+
+            var nearestCity = CityDataLoader.GetNearestCity((float)lat, (float)lon);
+            if (nearestCity == null)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            var adminIndex = nearestCity.Admin;
+            if (adminIndex < 0 || adminIndex >= CityDataLoader.Data!.Admins.Count)
+            {
+                return ExcelError.ExcelErrorNA;
+            }
+
+            return CityDataLoader.Data.Admins[adminIndex].AdminType;
+        }
+        catch
+        {
+            return ExcelError.ExcelErrorValue;
+        }
+    }
+
 
     [ExcelFunction(Name = "GEO_CITY", Description = "Finds the city name for a given latitude and longitude.")]
     public static object GeoReverseLookupCity(
@@ -67,12 +216,12 @@ public static class ReverseLookupFunctions
             }
 
             var cityIndex = nearestCity.City;
-            if (cityIndex < 0 || cityIndex >= CityDataLoader.Data!.StringPool.Count)
+            if (cityIndex < 0 || cityIndex >= CityDataLoader.Data!.CityStringPool.Count)
             {
                 return ExcelError.ExcelErrorNA;
             }
 
-            return CityDataLoader.Data.StringPool[cityIndex];
+            return CityDataLoader.Data.CityStringPool[nearestCity.City];
         }
         catch
         {
@@ -104,12 +253,12 @@ public static class ReverseLookupFunctions
             }
 
             var tzIndex = nearestCity.Timezone;
-            if (tzIndex < 0 || tzIndex >= CityDataLoader.Data!.StringPool.Count)
+            if (tzIndex < 0 || tzIndex >= CityDataLoader.Data!.TimeZoneStringPool.Count)
             {
                 return ExcelError.ExcelErrorNA;
             }
 
-            return CityDataLoader.Data.StringPool[tzIndex];
+            return CityDataLoader.Data.TimeZoneStringPool[tzIndex];
         }
         catch
         {
@@ -141,12 +290,12 @@ public static class ReverseLookupFunctions
             }
 
             var tzIndex = nearestCity.Timezone;
-            if (tzIndex < 0 || tzIndex >= CityDataLoader.Data!.StringPool.Count)
+            if (tzIndex < 0 || tzIndex >= CityDataLoader.Data!.TimeZoneStringPool.Count)
             {
                 return ExcelError.ExcelErrorNA;
             }
 
-            var tz = CityDataLoader.Data.StringPool[tzIndex];
+            var tz = CityDataLoader.Data.TimeZoneStringPool[tzIndex];
 
             return tz.ToTimeZoneOffsets().StandardOffset;
         }
@@ -180,12 +329,12 @@ public static class ReverseLookupFunctions
             }
 
             var tzIndex = nearestCity.Timezone;
-            if (tzIndex < 0 || tzIndex >= CityDataLoader.Data!.StringPool.Count)
+            if (tzIndex < 0 || tzIndex >= CityDataLoader.Data!.TimeZoneStringPool.Count)
             {
                 return ExcelError.ExcelErrorNA;
             }
 
-            var tz = CityDataLoader.Data.StringPool[tzIndex];
+            var tz = CityDataLoader.Data.TimeZoneStringPool[tzIndex];
 
             return tz.ToTimeZoneOffsets().DaylightSavingOffset;
         }

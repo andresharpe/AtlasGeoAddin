@@ -2,26 +2,9 @@
 using CsvHelper.Configuration;
 using MessagePack;
 using System.Globalization;
+using System.Numerics;
 
 namespace Atlas.BuildBin;
-
-[MessagePackObject]
-public class CityCompact
-{
-    [Key(0)] public float Lat;
-    [Key(1)] public float Lng;
-    [Key(2)] public int City;
-    [Key(3)] public int Country;
-    [Key(4)] public int Timezone;
-    [Key(5)] public int AdminType;
-}
-
-[MessagePackObject]
-public class CityDataBundle
-{
-    [Key(0)] public List<CityCompact> Cities = [];
-    [Key(1)] public List<string> StringPool = [];
-}
 
 internal class Program
 {
@@ -31,7 +14,11 @@ internal class Program
         var outputPath = "./data/worldcities.bin";
 
         var bundle = new CityDataBundle();
-        var stringIndex = new Dictionary<string, int>();
+
+        var cityStringPoolIndex = new Dictionary<string, int>();
+        var timeZoneStringPoolIndex = new Dictionary<string, int>();
+        var adminPoolIndex = new Dictionary<string, AdminCompact>();
+        var countryPoolIndex = new Dictionary<string, CountryCompact>();
 
         using var reader = new StreamReader(inputPath);
         using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -54,10 +41,10 @@ internal class Program
                 float lat = float.Parse(record.lat, CultureInfo.InvariantCulture);
                 float lng = float.Parse(record.lng, CultureInfo.InvariantCulture);
 
-                int cityIdx = GetOrAdd(stringIndex, record.city_ascii, bundle.StringPool);
-                int countryIdx = GetOrAdd(stringIndex, record.country, bundle.StringPool);
-                int timezoneIdx = GetOrAdd(stringIndex, record.timezone, bundle.StringPool);
-                int adminTypeIdx = GetOrAdd(stringIndex, record.admin_type, bundle.StringPool);
+                var cityIdx = GetOrAdd(cityStringPoolIndex, record.city_ascii, bundle.CityStringPool);
+                var timezoneIdx = GetOrAdd(timeZoneStringPoolIndex, record.timezone, bundle.TimeZoneStringPool);
+                var adminIdx = GetOrAdd(adminPoolIndex, record.admin_code, record.admin_name_ascii, record.admin_type, bundle.Admins);
+                var countryIdx = GetOrAdd(countryPoolIndex, record.iso2, record.country, bundle.Countries);
 
                 bundle.Cities.Add(new CityCompact
                 {
@@ -65,8 +52,8 @@ internal class Program
                     Lng = lng,
                     City = cityIdx,
                     Country = countryIdx,
+                    Admin = adminIdx,
                     Timezone = timezoneIdx,
-                    AdminType = adminTypeIdx
                 });
             }
             catch
@@ -81,17 +68,42 @@ internal class Program
 
         Console.WriteLine($"✅ Saved compressed city data to: {outputPath}");
         Console.WriteLine($"   → Total cities: {bundle.Cities.Count}");
-        Console.WriteLine($"   → Unique strings in pool: {bundle.StringPool.Count}");
+        Console.WriteLine($"   → Unique city strings in pool: {bundle.CityStringPool.Count}");
+        Console.WriteLine($"   → Unique countries in pool: {bundle.Countries.Count}");
+        Console.WriteLine($"   → Unique time zone strings in pool: {bundle.TimeZoneStringPool.Count}");
+        Console.WriteLine($"   → Unique admins in pool: {bundle.Admins.Count}");
     }
 
-    private static int GetOrAdd(Dictionary<string, int> map, string value, List<string> pool)
+    private static T GetOrAdd<T>(Dictionary<string, T> map, string value, List<string> pool) where T : INumber<T>
     {
-        if (!map.TryGetValue(value, out int index))
+        if (!map.TryGetValue(value, out T? index))
         {
-            index = pool.Count;
+            index = T.CreateChecked(pool.Count);
             map[value] = index;
             pool.Add(value);
         }
         return index;
+    }
+
+    private static byte GetOrAdd(Dictionary<string, CountryCompact> map, string countryIso2, string countryName, List<CountryCompact> pool)
+    {
+        if (!map.TryGetValue(countryIso2, out CountryCompact? country))
+        {
+            country = new CountryCompact() { CountryId = (byte)map.Count, CountryName = countryName, CountryCode = countryIso2 };
+            map[countryIso2] = country;
+            pool.Add(country);
+        }
+        return country.CountryId;
+    }
+
+    private static int GetOrAdd(Dictionary<string, AdminCompact> map, string adminCode, string adminName, string adminType, List<AdminCompact> pool)
+    {
+        if (!map.TryGetValue(adminCode, out AdminCompact? admin))
+        {
+            admin = new AdminCompact() { AdminId = map.Count, AdminName = adminName, AdminCode = adminCode, AdminType = adminType };
+            map[adminCode] = admin;
+            pool.Add(admin);
+        }
+        return admin.AdminId;
     }
 }
