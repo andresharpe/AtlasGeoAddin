@@ -37,7 +37,7 @@ jobs:
         run: |
           $version = "${{ github.ref_name }}"
           $xll = "src/Atlas.Dna/bin/Release/net6.0-windows/publish/Atlas.Dna-AddIn64-packed.xll"
-          $exe = "src/Atlas.Dna/bin/Release/net6.0-windows/AtlasAddInInstaller.exe"
+          $exe = "src/Atlas.Dna/bin/Release/net6.0-windows/AtlasAddInInstaller-$version.exe"
           mkdir dist
           Copy-Item $exe "dist/AtlasAddInInstaller-$version.exe"
           Compress-Archive -Path dist/* -DestinationPath "AtlasAddIn-$version.zip"

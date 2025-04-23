@@ -30,7 +30,7 @@
   </Target>
 
   <Target Name="PostBuildInstaller" AfterTargets="Build">
-    <Exec Command="set OutDir=$(TargetDir)&amp;&amp; &quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)Build\AtlasAddInInstaller.iss&quot;" />
+    <Exec Command="set OutDir=$(TargetDir)&amp;&amp; &quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;/DAppVersion=$(Version)&quot; &quot;$(ProjectDir)Build\AtlasAddInInstaller.iss&quot;" />
   </Target>
 
 </Project>
