@@ -1,26 +1,36 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">  
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>  
-		<TargetFramework>net6.0-windows</TargetFramework>  
-		<ImplicitUsings>enable</ImplicitUsings>  
-		<Nullable>enable</Nullable>  
-		<AssemblyName>Atlas-Dna</AssemblyName>  
-	</PropertyGroup>  
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Atlas-Dna</AssemblyName>
 
-	<ItemGroup>  
-		<PackageReference Include="ExcelDna.AddIn" Version="1.8.0" />  
-		<PackageReference Include="ExcelDna.Integration" Version="1.8.0" />  
-		<PackageReference Include="ExcelDna.IntelliSense" Version="1.8.0" />  
-		<PackageReference Include="KdTree" Version="1.4.1" />  
-		<PackageReference Include="MessagePack" Version="3.1.3" />  
-	</ItemGroup>  
+    <!-- Define fallback for SolutionDir -->
+    <_SolutionDirFallback Condition="'$(SolutionDir)' == ''">$(MSBuildProjectDirectory)\..\..</_SolutionDirFallback>
+    <EffectiveSolutionDir Condition="'$(SolutionDir)' != ''">$(SolutionDir)</EffectiveSolutionDir>
+    <EffectiveSolutionDir Condition="'$(SolutionDir)' == ''">$(_SolutionDirFallback)\</EffectiveSolutionDir>
+  </PropertyGroup>
 
-	<Target Name="PostBuildInstaller" AfterTargets="Build">  
-		<Exec Command="set OutDir=$(TargetDir)&amp;&amp; &quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)Build\AtlasAddInInstaller.iss&quot;" />  
-	</Target>
+  <ItemGroup>
+    <PackageReference Include="ExcelDna.AddIn" Version="1.8.0" />
+    <PackageReference Include="ExcelDna.Integration" Version="1.8.0" />
+    <PackageReference Include="ExcelDna.IntelliSense" Version="1.8.0" />
+    <PackageReference Include="KdTree" Version="1.4.1" />
+    <PackageReference Include="MessagePack" Version="3.1.3" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="$(SolutionDir)data/worldcities.bin" />
-	</ItemGroup>
-	
+  <ItemGroup>
+    <EmbeddedResource Include="$(EffectiveSolutionDir)data\worldcities.bin" />
+  </ItemGroup>
+
+  <Target Name="CheckEmbeddedResourceExists" BeforeTargets="BeforeBuild">
+    <Message Importance="high" Text="Checking for required file: $(EffectiveSolutionDir)data\worldcities.bin" />
+    <Error Condition="!Exists('$(EffectiveSolutionDir)data\worldcities.bin')" Text="Missing required embedded resource: data\worldcities.bin" />
+  </Target>
+
+  <Target Name="PostBuildInstaller" AfterTargets="Build">
+    <Exec Command="set OutDir=$(TargetDir)&amp;&amp; &quot;C:\Program Files (x86)\Inno Setup 6\ISCC.exe&quot; &quot;$(ProjectDir)Build\AtlasAddInInstaller.iss&quot;" />
+  </Target>
+
 </Project>
