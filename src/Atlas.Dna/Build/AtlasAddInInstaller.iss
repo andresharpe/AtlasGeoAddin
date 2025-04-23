@@ -21,15 +21,6 @@ UninstallDisplayName=Atlas Excel Add-In
 Source: "{#BuildOutputDir}\publish\Atlas.Dna-AddIn64-packed.xll"; DestDir: "{app}"; Flags: ignoreversion
 
 [Code]
-// Check for .NET 6 Desktop Runtime
-function IsDotNet6DesktopInstalled(): Boolean;
-var
-  version: string;
-begin
-  // Check if 6.0.0 or higher exists
-  Result := RegQueryStringValue(HKLM, 'SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedfx\windowsdesktop', '6.0.0', version);
-end;
-
 procedure AddOrUpdateExcelAddinKey();
 var
   i: Integer;
@@ -99,6 +90,3 @@ begin
   RemoveExcelAddinKey();
 end;
 
-[Run]
-Filename: "{tmp}\windowsdesktop-runtime-6.0.27-win-x64.exe"; Parameters: "/install /quiet /norestart"; \
-  StatusMsg: "Installing .NET 6 Desktop Runtime..."; Flags: waituntilterminated; Check: not IsDotNet6DesktopInstalled
