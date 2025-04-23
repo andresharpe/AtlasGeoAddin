@@ -19,7 +19,6 @@ UninstallDisplayName=Atlas Excel Add-In
 
 [Files]
 Source: "{#BuildOutputDir}\publish\Atlas.Dna-AddIn64-packed.xll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BuildOutputDir}\windowsdesktop-runtime-6.0.27-win-x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 [Code]
 // Check for .NET 6 Desktop Runtime
