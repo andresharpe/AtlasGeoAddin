@@ -1,6 +1,8 @@
 @echo on
 setlocal
 
+smctl healthcheck
+
 :: Input check
 if "%~1"=="" (
     echo [ERROR] No input file provided.
