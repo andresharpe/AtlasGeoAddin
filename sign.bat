@@ -1,7 +1,8 @@
-@echo on
+@echo off
 setlocal
 
-smctl healthcheck
+:: smctl healthcheck
+echo [INFO] Synchronizing Certs
 smctl windows certsync --keypair-alias=%SM_KEYPAIR_ALIAS%
 
 :: Input check
@@ -40,7 +41,7 @@ if not exist "%temp%" (
 
 :: Run signing tool
 echo [INFO] Signing: "%temp%"
-smctl sign --fingerprint %SM_CODE_SIGNING_CERT_SHA1_HASH% --input "%temp%" --config-file C:\Users\RUNNER~1\AppData\Local\Temp\smtools-windows-x64\pkcs11properties.cfg
+smctl sign --fingerprint %SM_CODE_SIGNING_CERT_SHA1_HASH% --input "%temp%" 
 echo [INFO] smctl returned: %ERRORLEVEL%
 
 if errorlevel 1 (
