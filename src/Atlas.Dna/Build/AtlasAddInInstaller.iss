@@ -16,9 +16,11 @@ SolidCompression=yes
 PrivilegesRequired=lowest
 UninstallDisplayIcon={app}\Atlas.Dna-AddIn64.xll
 UninstallDisplayName=Atlas Excel Add-In
+SignTool=signtool $f
+
 
 [Files]
-Source: "{#BuildOutputDir}\publish\Atlas.Dna-AddIn64-packed.xll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildOutputDir}\publish\Atlas.Dna-AddIn64-packed.xll"; DestDir: "{app}"; Flags: ignoreversion signonce
 
 [Code]
 procedure AddOrUpdateExcelAddinKey();
