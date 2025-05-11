@@ -21,6 +21,24 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
+      - name: Set up certificate 
+        run: | 
+          echo "${{ secrets.SM_CLIENT_CERT_FILE_B64 }}" | base64 --decode > /d/Certificate_pkcs12.p12 
+        shell: bash 
+    
+      - name: Set variables 
+        id: variables 
+        run: | 
+          echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT 
+          echo "SM_HOST=${{ secrets.SM_HOST }}" >> "$GITHUB_ENV" 
+          echo "SM_API_KEY=${{ secrets.SM_API_KEY }}" >> "$GITHUB_ENV" 
+          echo "SM_CLIENT_CERT_FILE=D:\\Certificate_pkcs12.p12" >> "$GITHUB_ENV" 
+          echo "SM_CLIENT_CERT_PASSWORD=${{ secrets.SM_CLIENT_CERT_PASSWORD }}" >> "$GITHUB_ENV" 
+        shell: bash
+    
+      - name: Code signing with Software Trust Manager
+        uses: digicert/ssm-code-signing@v1.0.0
+    
       - name: Restore dependencies
         run: dotnet restore
 
@@ -32,6 +50,13 @@ jobs:
             -p:Version=$version `
             -p:InformationalVersion=$tag `
             -p:IncludeSourceRevisionInInformationalVersion=false
+
+      - name: Signing using certificate fingerprint      
+        run: |
+          $xll = "src/Atlas.Dna/bin/Release/net6.0-windows/publish/Atlas.Dna-AddIn64-packed.xll"
+          smctl sign --fingerprint ${{ secrets.SM_CODE_SIGNING_CERT_SHA1_HASH }} --input $xll --config-file path/to/pkcs11properties.cfg
+        shell: cmd  
+        
       - name: Rename and zip release files
         shell: pwsh
         run: |
