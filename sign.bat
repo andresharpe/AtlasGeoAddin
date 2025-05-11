@@ -2,6 +2,7 @@
 setlocal
 
 smctl healthcheck
+smctl windows certsync --keypair-alias=%SM_KEYPAIR_ALIAS%
 
 :: Input check
 if "%~1"=="" (
@@ -39,7 +40,7 @@ if not exist "%temp%" (
 
 :: Run signing tool
 echo [INFO] Signing: "%temp%"
-smctl sign --fingerprint ffc2d19f32085e28dc4c7a218a865cedf4fa346b --input "%temp%" --config-file C:\Users\RUNNER~1\AppData\Local\Temp\smtools-windows-x64\pkcs11properties.cfg
+smctl sign --fingerprint %SM_CODE_SIGNING_CERT_SHA1_HASH% --input "%temp%" --config-file C:\Users\RUNNER~1\AppData\Local\Temp\smtools-windows-x64\pkcs11properties.cfg
 echo [INFO] smctl returned: %ERRORLEVEL%
 
 if errorlevel 1 (
